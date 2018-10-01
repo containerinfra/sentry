@@ -1,12 +1,28 @@
 version: '3'
 
 services:
+  # OPTIONAL: If you want to get emails from sentry include this docker container
+  smtp:
+    image: 'tianon/exim4:latest'
+    environment:
+      GMAIL_USER: 'GMAIL_USER@gmail.com'
+      GMAIL_PASSWORD: 'GMAIL_PASSWORD_OR_GMAIL_APP_PASSWORD'
+
   sentry-base:
-    image: 'registry.gitlab.com/containerinfra/sentry:latest'
+    image: 'sentry:latest'
+    container_name: sentry-base
     restart: unless-stopped
+    depends_on:
+      - sentry-redis
+      - sentry-postgres
+    links:
+      - sentry-redis
+      - sentry-postgres
     ports:
       - 880:9000
     environment:
+      # OPTIONAL: Include if you're using email
+      SENTRY_EMAIL_HOST: smtp
       SENTRY_POSTGRES_HOST: sentry-postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
@@ -19,14 +35,18 @@ services:
 
       # OPTIONAL: Include if Sentry is available over HTTPS
       SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
-      # Replace the secret key
-      SENTRY_SECRET_KEY: 'mysuperlongsecretkey'
+      SENTRY_SECRET_KEY: '1ffz7qx@f5ss_g&s_^ugi2_j192one)8((3zv%enur0%a9)gvh'
     volumes:
       - ./srv/sentry/sentry:/var/lib/sentry/files
 
   sentry-cron:
-    image: 'registry.gitlab.com/containerinfra/sentry:latest'
+    image: 'sentry:latest'
     restart: unless-stopped
+    depends_on:
+      - sentry-base
+    links:
+      - sentry-redis
+      - sentry-postgres
     command: "sentry run cron"
     environment:
       # OPTIONAL: Include if you're using email
@@ -43,13 +63,17 @@ services:
 
       # OPTIONAL: Include if Sentry is available over HTTPS
       SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
-      # Replace the secret key
-      SENTRY_SECRET_KEY: 'mysuperlongsecretkey'
+      SENTRY_SECRET_KEY: '1ffz7qx@f5ss_g&s_^ugi2_j192one)8((3zv%enur0%a9)gvh'
     volumes:
       - ./srv/sentry/sentry:/var/lib/sentry/files
 
   sentry-worker:
-    image: 'registry.gitlab.com/containerinfra/sentry:latest'
+    image: 'sentry:latest'
+    depends_on:
+      - sentry-base
+    links:
+      - sentry-redis
+      - sentry-postgres
     command: "sentry run worker"
     environment:
       # OPTIONAL: Include if you're using email
@@ -66,8 +90,7 @@ services:
 
       # OPTIONAL: Include if Sentry is available over HTTPS
       SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
-      # Replace the secret key
-      SENTRY_SECRET_KEY: 'mysuperlongsecretkey'
+      SENTRY_SECRET_KEY: '1ffz7qx@f5ss_g&s_^ugi2_j192one)8((3zv%enur0%a9)gvh'
     volumes:
       - ./srv/sentry/sentry:/var/lib/sentry/files
 
