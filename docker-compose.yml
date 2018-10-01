@@ -1,0 +1,85 @@
+version: '3'
+
+services:
+  sentry-base:
+    image: 'registry.gitlab.com/containerinfra/sentry:latest'
+    restart: unless-stopped
+    ports:
+      - 880:9000
+    environment:
+      SENTRY_POSTGRES_HOST: sentry-postgres
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: sentry
+      SENTRY_REDIS_HOST: sentry-redis
+
+      # OPTIONAL: If you want GitHub integration
+      GITHUB_APP_ID: #FILL ME IN
+      GITHUB_API_SECRET: #FILL ME IN
+      GITHUB_EXTENDED_PERMISSIONS: '["repo"]'
+
+      # OPTIONAL: Include if Sentry is available over HTTPS
+      SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
+      # Replace the secret key
+      SENTRY_SECRET_KEY: 'mysuperlongsecretkey'
+    volumes:
+      - ./srv/sentry/sentry:/var/lib/sentry/files
+
+  sentry-cron:
+    image: 'registry.gitlab.com/containerinfra/sentry:latest'
+    restart: unless-stopped
+    command: "sentry run cron"
+    environment:
+      # OPTIONAL: Include if you're using email
+      SENTRY_EMAIL_HOST: smtp
+      SENTRY_POSTGRES_HOST: sentry-postgres
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: sentry
+      SENTRY_REDIS_HOST: sentry-redis
+
+      # OPTIONAL: If you want GitHub integration
+      GITHUB_APP_ID: #FILL ME IN
+      GITHUB_API_SECRET: #FILL ME IN
+      GITHUB_EXTENDED_PERMISSIONS: '["repo"]'
+
+      # OPTIONAL: Include if Sentry is available over HTTPS
+      SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
+      # Replace the secret key
+      SENTRY_SECRET_KEY: 'mysuperlongsecretkey'
+    volumes:
+      - ./srv/sentry/sentry:/var/lib/sentry/files
+
+  sentry-worker:
+    image: 'registry.gitlab.com/containerinfra/sentry:latest'
+    command: "sentry run worker"
+    environment:
+      # OPTIONAL: Include if you're using email
+      SENTRY_EMAIL_HOST: smtp
+      SENTRY_POSTGRES_HOST: sentry-postgres
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: sentry
+      SENTRY_REDIS_HOST: sentry-redis
+
+      # OPTIONAL: If you want GitHub integration
+      GITHUB_APP_ID: #FILL ME IN
+      GITHUB_API_SECRET: #FILL ME IN
+      GITHUB_EXTENDED_PERMISSIONS: '["repo"]'
+
+      # OPTIONAL: Include if Sentry is available over HTTPS
+      SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
+      # Replace the secret key
+      SENTRY_SECRET_KEY: 'mysuperlongsecretkey'
+    volumes:
+      - ./srv/sentry/sentry:/var/lib/sentry/files
+
+
+  sentry-redis:
+    image: 'redis:latest'
+
+  sentry-postgres:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: sentry
+      POSTGRES_PASSWORD: sentry
+      POSTGRES_DB: sentry 
+    volumes:
+      - ./srv/sentry/postgres:/var/lib/postgresql/data
