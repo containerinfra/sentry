@@ -3,6 +3,7 @@ stages:
   - scan
 
 variables:
+  DOCKER_DRIVER: overlay2
   MAJOR_VERSION: '9'
   MINOR_VERSION: '9.0'
   FULL_VERSION: '9.0.0'
@@ -69,9 +70,8 @@ container_scanning:
   image: docker:stable
   stage: scan
   variables:
-    DOCKER_DRIVER: overlay2
     CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
-    CI_APPLICATION_TAG: $CI_COMMIT_REF_SLUG
+    CI_APPLICATION_TAG: $FULL_VERSION
   allow_failure: true
   services:
     - docker:stable-dind
