@@ -12,9 +12,44 @@ This repository containers Dockerfiles and configuration to build multiple Sentr
 
 ## Usage
 
-TODO.
+### Image
 
-### Available tags
+Deploy Sentry using `registry.gitlab.com/containerinfra/sentry`. See `docker-compose.yml` for an example.
+
+### Configuration
+
+This container uses the following environment variables for configuring oidc, these are required for this image to work properly. 
+
+If not set, you may have trouble with configurating authentication plugins in the organisation settings.
+
+| Variable | Description |
+|-----|-------|
+| `OIDC_CLIENT_ID` | Client id |
+| `OIDC_CLIENT_SECRET` | Client secret |
+| `OIDC_SCOPE` | Required scopes, defaults to `openid email` |
+| `OIDC_WELL_KNOWN_URL` | URL to fetch oidc endpoints from |
+
+### Gitlab
+
+When using this with a Gitlab installation, supply the following environment variables:
+
+```yaml
+    OIDC_CLIENT_ID: 'YOUR-CLIENT-ID'
+    OIDC_CLIENT_SECRET: 'YOUR-CLIENT-SECRET'
+    ODIC_WELL_KNOWN_URL: 'https://gitlab.yourdomain.com'
+```
+
+### Keycloak
+
+When using this with Keycloak installation, supply the following environment variables:
+
+```yaml
+    OIDC_CLIENT_ID: 'YOUR-CLIENT-ID'
+    OIDC_CLIENT_SECRET: 'YOUR-CLIENT-SECRET'
+    ODIC_WELL_KNOWN_URL: 'http://keycloak.yourdomain.com/auth/realms/YOUR_REALM'
+```
+
+### Image tags
 
 | Tag | Notes |
 |-----|-------|
