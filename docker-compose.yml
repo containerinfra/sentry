@@ -1,25 +1,10 @@
 version: '3'
 
 services:
-  # OPTIONAL: If you want to get emails from sentry include this docker container
-  smtp:
-    image: 'tianon/exim4:latest'
-    environment:
-      GMAIL_USER: 'GMAIL_USER@gmail.com'
-      GMAIL_PASSWORD: 'GMAIL_PASSWORD_OR_GMAIL_APP_PASSWORD'
-
-  sentry-base:
-    image: 'sentry:latest'
-    container_name: sentry-base
-    restart: unless-stopped
-    depends_on:
-      - sentry-redis
-      - sentry-postgres
-    links:
-      - sentry-redis
-      - sentry-postgres
-    ports:
-      - 880:9000
+    # sentry upgrade
+  sentry-upgrade:
+    image: registry.gitlab.com/containerinfra/sentry:9.0.0
+    command: "sentry upgrade --noinput"
     environment:
       # OPTIONAL: Include if you're using email
       SENTRY_EMAIL_HOST: smtp
@@ -28,10 +13,32 @@ services:
       SENTRY_DB_PASSWORD: sentry
       SENTRY_REDIS_HOST: sentry-redis
 
-      # OPTIONAL: If you want GitHub integration
-      GITHUB_APP_ID: #FILL ME IN
-      GITHUB_API_SECRET: #FILL ME IN
-      GITHUB_EXTENDED_PERMISSIONS: '["repo"]'
+      # OPTIONAL: Include if Sentry is available over HTTPS
+      SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
+      SENTRY_SECRET_KEY: '1ffz7qx@f5ss_g&s_^ugi2_j192one)8((3zv%enur0%a9)gvh'
+    volumes:
+      - ./srv/sentry/sentry:/var/lib/sentry/files
+
+  sentry-base:
+    image: registry.gitlab.com/containerinfra/sentry:9.0.0
+    container_name: sentry-base
+    restart: unless-stopped
+    ports:
+      - 880:9000
+    environment:
+      OIDC_CLIENT_ID: ''
+      OIDC_CLIENT_SECRET: ''
+      ODIC_SCOPE: 'openid read_user'
+      ODIC_WELL_KNOWN_URL: 'https://gitlab.com'
+      # https://gitlab.com/.well-known/openid-configuration
+  
+      # OPTIONAL: Include if you're using email
+      SENTRY_EMAIL_HOST: smtp
+      SENTRY_POSTGRES_HOST: sentry-postgres
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: sentry
+      SENTRY_REDIS_HOST: sentry-redis
+      SENTRY_SINGLE_ORGANIZATION: 'false'
 
       # OPTIONAL: Include if Sentry is available over HTTPS
       SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
@@ -40,26 +47,22 @@ services:
       - ./srv/sentry/sentry:/var/lib/sentry/files
 
   sentry-cron:
-    image: 'sentry:latest'
+    image: registry.gitlab.com/containerinfra/sentry:9.0.0
     restart: unless-stopped
-    depends_on:
-      - sentry-base
-    links:
-      - sentry-redis
-      - sentry-postgres
     command: "sentry run cron"
     environment:
+      OIDC_CLIENT_ID: ''
+      OIDC_CLIENT_SECRET: ''
+      ODIC_SCOPE: 'openid read_user'
+      ODIC_WELL_KNOWN_URL: 'https://gitlab.com'
+      # https://gitlab.com/.well-known/openid-configuration
+  
       # OPTIONAL: Include if you're using email
       SENTRY_EMAIL_HOST: smtp
       SENTRY_POSTGRES_HOST: sentry-postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
       SENTRY_REDIS_HOST: sentry-redis
-
-      # OPTIONAL: If you want GitHub integration
-      GITHUB_APP_ID: #FILL ME IN
-      GITHUB_API_SECRET: #FILL ME IN
-      GITHUB_EXTENDED_PERMISSIONS: '["repo"]'
 
       # OPTIONAL: Include if Sentry is available over HTTPS
       SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
@@ -68,25 +71,21 @@ services:
       - ./srv/sentry/sentry:/var/lib/sentry/files
 
   sentry-worker:
-    image: 'sentry:latest'
-    depends_on:
-      - sentry-base
-    links:
-      - sentry-redis
-      - sentry-postgres
+    image: registry.gitlab.com/containerinfra/sentry:9.0.0
     command: "sentry run worker"
     environment:
+      OIDC_CLIENT_ID: ''
+      OIDC_CLIENT_SECRET: ''
+      ODIC_SCOPE: 'openid read_user'
+      ODIC_WELL_KNOWN_URL: 'https://gitlab.com'
+      # https://gitlab.com/.well-known/openid-configuration
+  
       # OPTIONAL: Include if you're using email
       SENTRY_EMAIL_HOST: smtp
       SENTRY_POSTGRES_HOST: sentry-postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
       SENTRY_REDIS_HOST: sentry-redis
-
-      # OPTIONAL: If you want GitHub integration
-      GITHUB_APP_ID: #FILL ME IN
-      GITHUB_API_SECRET: #FILL ME IN
-      GITHUB_EXTENDED_PERMISSIONS: '["repo"]'
 
       # OPTIONAL: Include if Sentry is available over HTTPS
       SOCIAL_AUTH_REDIRECT_IS_HTTPS: 'false'
