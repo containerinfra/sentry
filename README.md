@@ -14,7 +14,7 @@ This repository containers Dockerfiles and configuration to build multiple Sentr
 
 ### Image
 
-Deploy Sentry using `registry.gitlab.com/containerinfra/sentry`. See `docker-compose.yml` for an example.
+Deploy Sentry using `containerinfra/sentry`. See `docker-compose.yml` for an example.
 
 ### Configuration
 
