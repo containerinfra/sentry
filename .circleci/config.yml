@@ -15,13 +15,13 @@ jobs:
           docker_layer_caching: true 
 
       - run: |
-          if [ $CIRCLE_BRANCH ]; then 
+          if [ $CIRCLE_BRANCH == "master" ]; then
             docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD 
           fi
           
           docker build --build-arg SENTRY_VERSION=$FULL_VERSION -t $CI_REGISTRY_IMAGE:$FULL_VERSION --label org.opencontainers.image.revision=$CIRCLE_SHA1 .
           
-          if [ $CIRCLE_BRANCH ]; then 
+          if [ $CIRCLE_BRANCH == "master"  ]; then
             docker tag $CI_REGISTRY_IMAGE:$FULL_VERSION $CI_REGISTRY_IMAGE:$MINOR_VERSION
             docker tag $CI_REGISTRY_IMAGE:$FULL_VERSION $CI_REGISTRY_IMAGE:$MAJOR_VERSION
             docker tag $CI_REGISTRY_IMAGE:$FULL_VERSION $CI_REGISTRY_IMAGE:latest
