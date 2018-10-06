@@ -62,11 +62,11 @@ When using this with Keycloak installation, supply the following environment var
 
 ## Automated build
 
-This image is build at least once a month automatically. All PR's are automatically build against the latest 2 major versions.
+This image is build at least once a month automatically.
 
 ## Contribute
 
-PRs accepted. All issues should be reported in the [Gitlab issue tracker](https://gitlab.com/containerinfra/sentry/issues).
+PRs accepted. All issues should be reported in the [Github issue tracker](https://github.com/containerinfra/sentry/issues).
 
 ## License
 
