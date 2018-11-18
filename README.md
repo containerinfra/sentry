@@ -36,9 +36,9 @@ If not set, you may have trouble with configurating authentication plugins in th
 When using this with a Gitlab installation, supply the following environment variables:
 
 ```yaml
-    OIDC_CLIENT_ID: 'YOUR-CLIENT-ID'
-    OIDC_CLIENT_SECRET: 'YOUR-CLIENT-SECRET'
-    ODIC_WELL_KNOWN_URL: 'https://gitlab.yourdomain.com'
+OIDC_CLIENT_ID: 'YOUR-CLIENT-ID'
+OIDC_CLIENT_SECRET: 'YOUR-CLIENT-SECRET'
+ODIC_WELL_KNOWN_URL: 'https://gitlab.yourdomain.com'
 ```
 
 ### Keycloak
@@ -46,9 +46,9 @@ When using this with a Gitlab installation, supply the following environment var
 When using this with Keycloak installation, supply the following environment variables:
 
 ```yaml
-    OIDC_CLIENT_ID: 'YOUR-CLIENT-ID'
-    OIDC_CLIENT_SECRET: 'YOUR-CLIENT-SECRET'
-    ODIC_WELL_KNOWN_URL: 'http://keycloak.yourdomain.com/auth/realms/YOUR_REALM'
+OIDC_CLIENT_ID: 'YOUR-CLIENT-ID'
+OIDC_CLIENT_SECRET: 'YOUR-CLIENT-SECRET'
+ODIC_WELL_KNOWN_URL: 'http://keycloak.yourdomain.com/auth/realms/YOUR_REALM'
 ```
 
 ### Image tags
