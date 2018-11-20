@@ -308,16 +308,16 @@ if 'BITBUCKET_CONSUMER_KEY' in os.environ:
 
 # OpenID Connect settings
 if 'OIDC_CLIENT_ID' in os.environ:
-    CLIENT_ID = env('OIDC_CLIENT_ID')
-    CLIENT_SECRET = env('OIDC_CLIENT_SECRET')
+    OIDC_CLIENT_ID = env('OIDC_CLIENT_ID')
+    OIDC_CLIENT_SECRET = env('OIDC_CLIENT_SECRET')
 
     if 'ODIC_SCOPE' in os.environ:
-        SCOPE = env('ODIC_SCOPE')
+        OIDC_SCOPE = env('ODIC_SCOPE')
     else:
-        SCOPE = "openid email"
-    
+        OIDC_SCOPE = "openid email"
+
     if 'ODIC_WELL_KNOWN_URL' in os.environ:
-        WELL_KNOWN_URL = env('ODIC_WELL_KNOWN_URL')
+        OIDC_DOMAIN = env('ODIC_WELL_KNOWN_URL')
     else:
         if 'OIDC_AUTHORIZATION_ENDPOINT' not in os.environ:
             raise Exception('Error: OIDC_AUTHORIZATION_ENDPOINT is undefined. Required for oidc configuration')
@@ -328,7 +328,7 @@ if 'OIDC_CLIENT_ID' in os.environ:
         if 'OIDC_ISSUER' not in os.environ:
             raise Exception('Error: OIDC_ISSUER is undefined. Required for oidc configuration')
 
-        AUTHORIZATION_ENDPOINT = env('OIDC_AUTHORIZATION_ENDPOINT')
-        TOKEN_ENDPOINT = env('OIDC_TOKEN_ENDPOINT')
-        USERINFO_ENDPOINT = env('OIDC_USERINFO_ENDPOINT')
-        ISSUER = env('OIDC_ISSUER')
+        OIDC_AUTHORIZATION_ENDPOINT = env('OIDC_AUTHORIZATION_ENDPOINT')
+        OIDC_TOKEN_ENDPOINT = env('OIDC_TOKEN_ENDPOINT')
+        OIDC_USERINFO_ENDPOINT = env('OIDC_USERINFO_ENDPOINT')
+        OIDC_ISSUER = env('OIDC_ISSUER')
