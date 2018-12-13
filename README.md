@@ -4,7 +4,8 @@ Sentry build based upon the Official Sentry build from Docker hub, with addition
 
 This repository containers Dockerfiles and configuration to build multiple Sentry images and publishes those to the Gitlab Registry and Docker hub.
 
-[![Docker hub](https://img.shields.io/docker/pulls/containerinfra/sentry.svg)](https://hub.docker.com/r/containerinfra/sentry/)
+[![Docker hub](https://img.shields.io/docker/pulls/containerinfra/sentry.svg)](https://hub.docker.com/r/containerinfra/sentry/) [![CircleCI](https://circleci.com/gh/containerinfra/sentry.svg?style=svg)](https://circleci.com/gh/containerinfra/sentry)
+
 
 ## Table of Contents
 
